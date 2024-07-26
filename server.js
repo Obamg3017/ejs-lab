@@ -67,8 +67,28 @@ app.get("/", (req, res) => {
 
 app.get("/menu", (req, res)=>{
     res.render("menu.ejs", {
-    menu: RESTAURANT.menu
+    menu: RESTAURANT.menu,
     })
+})
+
+app.get("/menu/:category", (req, res)=>{
+  const { category } = req.params;
+  const filteredCategory = [];
+
+  for (let i=0; i<RESTAURANT.menu.length; i++){
+      if(RESTAURANT.menu[i].category === category){
+        filteredCategory.push(RESTAURANT.menu[i]);
+      }
+  }
+  const capitalizedCategory = category.charAt(0).toUpperCase() + category.slice(1);
+  // filtered method below:
+  // const filteredCategory = RESTAURANT.menu.filter(function(item){
+  //     return item.category === category;
+  // })
+  res.render("category.ejs", {
+    menuItems: filteredCategory,
+    category: capitalizedCategory,
+  });
 })
 
 app.listen(3000, ()=>{
